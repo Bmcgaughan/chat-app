@@ -46,8 +46,10 @@ export default function Start(props) {
     if (!userName.text || userName.text === '') {
       setUserNameAlert(true);
     } else {
-      alert(`Welcome ${userName.text}`);
-      props.navigation.navigate('Chat', { userName: userName.text });
+      props.navigation.navigate('Chat', {
+        userName: userName.text,
+        backgroundColor: backgroundColor,
+      });
     }
   };
 
@@ -182,7 +184,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 32,
     left: 10,
-
   },
 
   headerText: {
@@ -200,7 +201,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'flex-start',
     alignItems: 'center',
-
   },
 
   inputWrapper: {
@@ -260,7 +260,6 @@ const styles = StyleSheet.create({
   chatButtonWrapper: {
     paddingTop: 70,
     width: '88%',
-
   },
 
   chatButton: {
@@ -268,7 +267,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#757083',
     alignItems: 'center',
     justifyContent: 'center',
-    
   },
 
   buttonText: {

@@ -15,7 +15,13 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Welcome">
         <Stack.Screen name="Welcome" component={Start} />
-        <Stack.Screen name="Chat" component={Chat} />
+        <Stack.Screen
+          name="Chat"
+          component={Chat}
+          options={({ route }) => ({
+            title: `Welcome ${route.params.userName}!`,
+          })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
