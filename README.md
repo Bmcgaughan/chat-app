@@ -25,20 +25,9 @@ Work in Progress...right now just getting the structure set up. User can enter t
 
 
 ### Dependencies
-- @parcel/transformer-image ^ 2.0.0-rc.0
-- @parcel-bundler
-- @parcel/transformer-sass ^ 2.0.0-rc.0
-- axios ^ 0.27.2
-- prop-types ^ 15.8.1
-- react ^ 18.1.0
-- react-bootstrap ^ 2.3.1
-- react react-dom ^ 18.1.0
-- react-redux ^ 8.0.1
-- react-router-dom ^ 5.3.0
-- react-slick ^ 0.29.0
-- redux ^ 4.2.0
-- redux-devtools-extension ^ 2.13.9
-- swiper ^8.2.4
+react-native ^ 0.68.2
+react-native-svg ^ 12.4.3
+react-native-svg-transformer ^ 1.0.0
 
 ## Tech
 - React Native
