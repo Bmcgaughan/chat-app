@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
@@ -6,29 +6,31 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 
 export default function Chat(props) {
-  const [messages, setMessages] = useState([
-    {
-      _id: 1,
-      text: 'Hello developer',
-      createdAt: new Date(),
-      user: {
-        _id: 2,
-        name: 'React Native',
-        avatar: 'https://placeimg.com/140/140/any',
-      },
-
-    },
-    {
-      _id: 2,
-      text: 'This is a system message',
-      createdAt: new Date(),
-      system: true,
-     },
-  ]);
-
-  console.log(messages);
+  const [messages, setMessages] = useState([]);
 
   const { userName, backgroundColor } = props.route.params;
+
+  useEffect(() => {
+    //set initial system message
+    setMessages([
+      {
+        _id: 1,
+        text: 'Hello developer',
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: 'React Native',
+          avatar: 'https://placeimg.com/140/140/any',
+        },
+      },
+      {
+        _id: 2,
+        text: `${userName} has joined the chat`,
+        createdAt: new Date(),
+        system: true,
+      },
+    ]);
+  }, []);
 
   const onSend = (messages = []) => {
     setMessages((previousMessages) =>
@@ -37,13 +39,14 @@ export default function Chat(props) {
   };
 
   return (
-    <View style={[{ flex: 1 }, { backgroundColor: '#fff' }]}>
+    <View style={[{ flex: 1 }, { backgroundColor: backgroundColor}]}>
       <GiftedChat
         messages={messages}
         onSend={(messages) => onSend(messages)}
         user={{
           _id: 1,
         }}
+        
       />
     </View>
   );
