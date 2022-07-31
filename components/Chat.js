@@ -5,6 +5,23 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 
 import { GiftedChat, SystemMessage, Day } from 'react-native-gifted-chat';
 
+//import firebase
+import { initializeApp } from 'firebase/app';
+
+//firebase config settings and initialization
+import firebaseConfig from '../fbaseconfig.js';
+const app = initializeApp(firebaseConfig);
+import {
+  doc,
+  onSnapshot,
+  getFirestore,
+  collection,
+  getDoc,
+} from 'firebase/firestore';
+
+const db = getFirestore(app);
+let colRef = null;
+
 export default function Chat(props) {
   const [messages, setMessages] = useState([]);
 
@@ -26,26 +43,27 @@ export default function Chat(props) {
     />
   );
 
-  useEffect(() => {
-    //set initial system message
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
+  const onCollectionUpdate = (querySnapshot) => {
+    const messageArray = [];
+    querySnapshot.forEach((doc) => {
+      let data = doc.data();
+      messageArray.push({
+        _id: data._id,
+        text: data.text,
+        createdAt: data.createdAt,
         user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
+          _id: data.user._id,
+          name: data.user.name,
+          avatar: data.user.avatar,
         },
-      },
-      {
-        _id: 2,
-        text: `${userName} has joined the chat`,
-        createdAt: new Date(),
-        system: true,
-      },
-    ]);
+      });
+    });
+    setMessages(messageArray);
+  };
+
+  useEffect(() => {
+    colRef = collection(db, 'messages');
+    let unsubscribe = onSnapshot(colRef, onCollectionUpdate);
   }, []);
 
   const onSend = (messages = []) => {
