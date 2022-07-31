@@ -3,12 +3,28 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat, SystemMessage, Day } from 'react-native-gifted-chat';
 
 export default function Chat(props) {
   const [messages, setMessages] = useState([]);
 
   const { userName, backgroundColor } = props.route.params;
+
+  //change Day color
+  const renderDay = (props) => {
+    return <Day {...props} textStyle={{ color: 'white' }} />;
+  };
+
+  //change system message color
+  const renderSystemMessage = (props) => (
+    <SystemMessage
+      {...props}
+      textStyle={{
+        color: 'white',
+        fontSize: 14,
+      }}
+    />
+  );
 
   useEffect(() => {
     //set initial system message
@@ -39,14 +55,15 @@ export default function Chat(props) {
   };
 
   return (
-    <View style={[{ flex: 1 }, { backgroundColor: backgroundColor}]}>
+    <View style={[{ flex: 1 }, { backgroundColor: backgroundColor }]}>
       <GiftedChat
         messages={messages}
+        renderSystemMessage={renderSystemMessage}
+        renderDay={renderDay}
         onSend={(messages) => onSend(messages)}
         user={{
           _id: 1,
         }}
-        
       />
     </View>
   );
