@@ -17,6 +17,7 @@ import {
   getFirestore,
   collection,
   getDoc,
+  addDoc,
 } from 'firebase/firestore';
 
 const db = getFirestore(app);
@@ -58,7 +59,7 @@ export default function Chat(props) {
         },
       });
     });
-    setMessages(messageArray);
+    setMessages(messageArray.sort((a, b) => b.createdAt - a.createdAt));
   };
 
   useEffect(() => {
@@ -70,6 +71,24 @@ export default function Chat(props) {
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
+    let addData = {
+      _id: messages._id,
+      text: messages.text || '',
+      createdAt: messages.createdAt,
+      user: messages.user,
+      image: messages.image || null,
+      location: messages.location || null,
+    };
+
+
+    addDoc(colRef, {
+      _id: messages[0]._id,
+      text: messages[0].text || '',
+      createdAt: Date.parse(messages[0].createdAt),
+      user: messages[0].user,
+      image: messages[0].image || null,
+      location: messages[0].location || null,
+    });
   };
 
   return (
