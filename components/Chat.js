@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
+import uuid from 'react-uuid';
+
 import { GiftedChat, SystemMessage, Day } from 'react-native-gifted-chat';
 
 //import firebase
@@ -48,38 +50,67 @@ export default function Chat(props) {
     const messageArray = [];
     querySnapshot.forEach((doc) => {
       let data = doc.data();
-      messageArray.push({
-        _id: data._id,
-        text: data.text,
-        createdAt: data.createdAt,
-        user: {
-          _id: data.user._id,
-          name: data.user.name,
-          avatar: data.user.avatar,
-        },
-      });
+
+      if (data.system) {
+        messageArray.push({
+          _id: data.id,
+          text: data.text,
+          createdAt: data.createdAt,
+          system: data.system,
+        });
+      } else {
+        messageArray.push({
+          _id: data._id,
+          text: data.text,
+          createdAt: data.createdAt,
+          user: {
+            _id: data.user._id,
+            name: data.user.name,
+            avatar: data.user.avatar,
+          },
+        });
+      }
     });
     setMessages(messageArray.sort((a, b) => b.createdAt - a.createdAt));
   };
 
+  // const onLeaveChannel = () => {
+  //   const sysLeaveMessage = {
+  //     _id: uuid(),
+  //     text: `${userName} has left the channel.`,
+  //     createdAt: Date.parse(new Date()),
+  //     system: true,
+  //   };
+  //   addDoc(colRef, sysLeaveMessage);
+  // };
+
+  // const onJoinChannel = () => {
+  //   const sysJoinMessage = {
+  //     _id: uuid(),
+  //     text: `${userName} has joined the channel`,
+  //     createdAt: Date.parse(new Date()),
+  //     system: true,
+  //   };
+
+  //   addDoc(colRef, sysJoinMessage);
+  // };
+
   useEffect(() => {
+    //authenticate user
     colRef = collection(db, 'messages');
     let unsubscribe = onSnapshot(colRef, onCollectionUpdate);
+    // onJoinChannel();
+
+    return () => {
+      unsubscribe();
+      // onLeaveChannel();
+    };
   }, []);
 
   const onSend = (messages = []) => {
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
-    let addData = {
-      _id: messages._id,
-      text: messages.text || '',
-      createdAt: messages.createdAt,
-      user: messages.user,
-      image: messages.image || null,
-      location: messages.location || null,
-    };
-
 
     addDoc(colRef, {
       _id: messages[0]._id,

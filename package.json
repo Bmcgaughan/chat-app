@@ -27,7 +27,8 @@
     "react-native-svg": "^12.4.3",
     "react-native-svg-transformer": "^1.0.0",
     "react-native-web": "0.17.7",
-    "react-navigation": "^4.4.4"
+    "react-navigation": "^4.4.4",
+    "react-uuid": "^1.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
