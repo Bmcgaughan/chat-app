@@ -47,7 +47,7 @@ export default function Chat(props) {
   };
 
   const renderInputToolbar = (props) => {
-    if (!isConnected) {
+    if (isConnected) {
       return <InputToolbar {...props} />;
     }
   };
@@ -125,7 +125,6 @@ export default function Chat(props) {
   const saveMessages = async () => {
     try {
       await AsyncStorage.setItem('messages', JSON.stringify(messages));
-      console.log('Messages saved', messages);
     } catch (e) {
       console.log(e.message);
     }
@@ -143,7 +142,7 @@ export default function Chat(props) {
   //component mounting check if user is connected to internet
   useEffect(() => {
     NetInfo.fetch().then((connection) => {
-      setIsConnected(!connection.isConnected);
+      setIsConnected(connection.isConnected);
     });
   }, []);
 
