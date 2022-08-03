@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
@@ -12,6 +13,7 @@ import { initializeApp } from 'firebase/app';
 
 //firebase config settings and initialization
 import firebaseConfig from '../fbaseconfig.js';
+
 const app = initializeApp(firebaseConfig);
 import {
   doc,
@@ -95,6 +97,24 @@ export default function Chat(props) {
   //   addDoc(colRef, sysJoinMessage);
   // };
 
+  const getMessages = async () => {
+    let messages = '';
+    try {
+      messages = (await AsyncStorage.getItem('messages')) || [];
+      setMessages(JSON.parse(messages));
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const saveMessages = async () => {
+    try {
+      await AsyncStorage.setItem('messages', JSON.stringify(messages));
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   useEffect(() => {
     //authenticate user
     colRef = collection(db, 'messages');
@@ -108,9 +128,11 @@ export default function Chat(props) {
   }, []);
 
   const onSend = (messages = []) => {
+    //set messages and savemessages
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
+    saveMessages();
 
     addDoc(colRef, {
       _id: messages[0]._id,
