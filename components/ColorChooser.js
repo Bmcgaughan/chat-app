@@ -9,15 +9,22 @@ import {
   Animated,
 } from 'react-native';
 
+const colors = {
+  black: '#090C08',
+  purple: '#474056',
+  grey: '#8A95A5',
+  green: '#B9C6AE',
+};
+
 export default function ColorChooser(props) {
-  const { colors, backgroundColor } = props;
+  const { backgroundColor } = props;
 
   const handleBackgroundChange = (color) => {
     props.backgroundChange(color);
   };
 
   return (
-    <View style={styles.colorChooseWrapper}>
+    <View style={[styles.colorChooseWrapper, props.style]}>
       <TouchableOpacity
         accessibilityRole="button"
         style={[
@@ -75,18 +82,14 @@ export default function ColorChooser(props) {
 
 const styles = StyleSheet.create({
   colorChooseWrapper: {
-    width: '100%',
-    height: '100%',
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 0,
+    width: '100%',
+    justifyContent: 'space-around',
   },
 
   colorIcon: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    marginRight: 0,
   },
 });

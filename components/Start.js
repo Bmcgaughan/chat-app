@@ -4,6 +4,8 @@ import { SvgXml } from 'react-native-svg';
 
 import { StatusBar } from 'expo-status-bar';
 
+import ColorChooser from './ColorChooser';
+
 import {
   StyleSheet,
   Text,
@@ -60,7 +62,11 @@ export default function Start(props) {
 
   useEffect(() => {
     setUserNameAlert(false);
-    setSearchIcon(true);
+    if (userName.text === '') {
+      setSearchIcon(true);
+    } else {
+      setSearchIcon(false);
+    }
   }, []);
 
   return (
@@ -98,60 +104,11 @@ export default function Start(props) {
           <Text style={styles.chooseText}>Choose Background Color</Text>
 
           <View style={styles.colorChooseWrapper}>
-            <TouchableOpacity
-              accessibilityRole="button"
-              style={[
-                styles.colorIcon,
-                {
-                  backgroundColor: colors.black,
-                  borderWidth: backgroundColor === colors.black ? 3 : 0,
-                  borderColor:
-                    backgroundColor === colors.black ? 'red' : '#000',
-                },
-              ]}
-              onPress={() => handleBackgroundColor(colors.black)}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              accessible={true}
-              accessibilityRole="button"
-              style={[
-                styles.colorIcon,
-                {
-                  backgroundColor: colors.purple,
-                  borderWidth: backgroundColor === colors.purple ? 3 : 0,
-                  borderColor:
-                    backgroundColor === colors.purple ? 'red' : '#000',
-                },
-              ]}
-              onPress={() => handleBackgroundColor(colors.purple)}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              accessible={true}
-              accessibilityRole="button"
-              style={[
-                styles.colorIcon,
-                {
-                  backgroundColor: colors.grey,
-                  borderWidth: backgroundColor === colors.grey ? 3 : 0,
-                  borderColor: backgroundColor === colors.grey ? 'red' : '#000',
-                },
-              ]}
-              onPress={() => handleBackgroundColor(colors.grey)}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              accessible={true}
-              accessibilityRole="button"
-              style={[
-                styles.colorIcon,
-                {
-                  backgroundColor: colors.green,
-                  borderWidth: backgroundColor === colors.green ? 3 : 0,
-                  borderColor:
-                    backgroundColor === colors.green ? 'red' : '#000',
-                },
-              ]}
-              onPress={() => handleBackgroundColor(colors.green)}
-            ></TouchableOpacity>
+            <ColorChooser
+              backgroundColor={backgroundColor}
+              backgroundChange={(clr) => handleBackgroundColor(clr)}
+              style={styles.colorChooseWrapper}
+            />
           </View>
 
           <View style={styles.chatButtonWrapper}>
@@ -231,18 +188,11 @@ const styles = StyleSheet.create({
   },
 
   colorChooseWrapper: {
-    flexDirection: 'row',
-    width: '70%',
-    justifyContent: 'space-between',
     marginRight: 'auto',
-    paddingLeft: '6%',
-    paddingTop: 20,
-  },
-
-  colorIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    paddingTop: 10,
+    alignItems: 'center',
+    width: '85%',
+    paddingLeft: 5,
   },
 
   textAlert: {

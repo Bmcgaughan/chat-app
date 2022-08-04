@@ -372,9 +372,8 @@ export default function Chat(props) {
       >
         <ColorChooser
           backgroundChange={(clr) => handleBackgroundChange(clr)}
-          userName={userName}
-          colors={colors}
           backgroundColor={backgroundColor}
+          style={styles.colorChooseWrapper}
         />
       </Animated.View>
 
@@ -388,7 +387,6 @@ export default function Chat(props) {
           onSend={(messages) => onSend(messages)}
           showUserAvatar={true}
           user={{
-
             _id: 1,
             avatar: 'https://avatars.githubusercontent.com/u/87346945?v=4',
           }}
@@ -462,6 +460,14 @@ const styles = StyleSheet.create({
     width: 250,
     backgroundColor: 'white',
     zIndex: 200,
+  },
+  colorChooseWrapper: {
+    flexDirection: 'row',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 0,
   },
   profileBorder: {
     position: 'absolute',
