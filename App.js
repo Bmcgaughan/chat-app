@@ -19,10 +19,9 @@ export default function App() {
         <Stack.Screen
           name="Chat"
           component={Chat}
-          options={({ route }) => ({
-            title: `Welcome ${route.params.userName}!`,
-          })}
+          options={{ headerShown: false }}
         />
+        {/* <Stack.Screen name="Profile" component={Profile} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

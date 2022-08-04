@@ -49,6 +49,7 @@ export default function Start(props) {
       props.navigation.navigate('Chat', {
         userName: userName.text,
         backgroundColor: backgroundColor,
+        colors: colors,
       });
     }
   };
