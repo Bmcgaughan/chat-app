@@ -4,10 +4,10 @@ import 'react-native-gesture-handler';
 
 import Chat from './components/Chat';
 import Start from './components/Start';
+import ProfileSlide from './components/ProfileSlide';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
 
 const Stack = createStackNavigator();
 
@@ -21,7 +21,7 @@ export default function App() {
           component={Chat}
           options={{ headerShown: false }}
         />
-        {/* <Stack.Screen name="Profile" component={Profile} /> */}
+        <Stack.Screen name="Profile" component={ProfileSlide} />
       </Stack.Navigator>
     </NavigationContainer>
   );

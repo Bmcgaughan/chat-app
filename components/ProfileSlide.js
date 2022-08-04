@@ -12,18 +12,17 @@ import {
 } from 'react-native';
 
 export default function ProfileSlide(props) {
-  const [backgroundColor, setBackgroundColor] = useState(props.backgroundColor);
-
-  const { colors } = props;
-
+  const { colors, backgroundColor } = props;
+  useEffect(() => {}, []);
 
   const handleClick = () => {
     props.picturePress();
   };
 
   const handleBackgroundChange = (color) => {
-    setBackgroundColor(color);
+    props.backgroundChange(color);
   };
+
 
   return (
     <View style={styles.container}>
@@ -97,6 +96,19 @@ export default function ProfileSlide(props) {
           ></TouchableOpacity>
         </View>
       </View>
+      <View style={styles.logOut}>
+        <TouchableOpacity
+          accessible={true}
+          accessibilityRole="button"
+          onPress={() => props.logOut()}
+        >
+          <Text style={styles.logOutText}>Log Out</Text>
+        </TouchableOpacity>
+        <Image
+          source={require('../assets/logOut.png')}
+          style={styles.logOutIcon}
+        />
+      </View>
     </View>
   );
 }
@@ -124,7 +136,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   menuItem: {
-    flex: 1,
     alignItems: 'flex-start',
     paddingLeft: 20,
   },
@@ -135,10 +146,8 @@ const styles = StyleSheet.create({
 
   colorChooseWrapper: {
     flexDirection: 'row',
-    width: '70%',
-    justifyContent: 'space-between',
-    marginRight: 'auto',
-    paddingLeft: '6%',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
     paddingTop: 20,
   },
 
@@ -146,5 +155,22 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
+    marginRight: 5,
+  },
+  logOut: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    marginBottom: 110,
+    paddingRight: 20,
+  },
+  logOutText: {
+    fontSize: 15,
+  },
+  logOutIcon: {
+    height: 20,
+    width: 20,
+    marginLeft: 10,
   },
 });

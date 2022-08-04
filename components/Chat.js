@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   Image,
   Animated,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import uuid from 'react-uuid';
@@ -58,6 +59,32 @@ export default function Chat(props) {
     props.route.params['backgroundColor']
   );
   const { userName, colors } = props.route.params;
+
+  //component mounting check if user is connected to internet
+  useEffect(() => {
+    NetInfo.fetch().then((connection) => {
+      setIsConnected(connection.isConnected);
+    });
+  }, []);
+
+  //listening for connection state changes
+  useEffect(() => {
+    if (isConnected) {
+      colRef = collection(db, 'messages');
+      let unsubscribe = onSnapshot(colRef, onCollectionUpdate);
+
+      return () => unsubscribe();
+    } else {
+      getMessages();
+    }
+  }, [isConnected]);
+
+  //calling to save messages to AsyncStorage when message state is updated
+  useEffect(() => {
+    if (messages.length > 0) {
+      saveMessages();
+    }
+  }, [messages]);
 
   //change Day color
   const renderDay = (props) => {
@@ -137,32 +164,6 @@ export default function Chat(props) {
     }
   };
 
-  //component mounting check if user is connected to internet
-  useEffect(() => {
-    NetInfo.fetch().then((connection) => {
-      setIsConnected(connection.isConnected);
-    });
-  }, []);
-
-  //listening for connection state changes
-  useEffect(() => {
-    if (isConnected) {
-      colRef = collection(db, 'messages');
-      let unsubscribe = onSnapshot(colRef, onCollectionUpdate);
-
-      return () => unsubscribe();
-    } else {
-      getMessages();
-    }
-  }, [isConnected]);
-
-  //calling to save messages to AsyncStorage when message state is updated
-  useEffect(() => {
-    if (messages.length > 0) {
-      saveMessages();
-    }
-  }, [messages]);
-
   const onSend = (messages = []) => {
     //set messages and savemessages
     setMessages((previousMessages) =>
@@ -181,14 +182,29 @@ export default function Chat(props) {
     }
   };
 
+  const handleProfilePress = () => {
+    if (profileView) {
+      setProfileView(false);
+      Animated.spring(bounceValue, {
+        toValue: profileView ? -250 : 0,
+        velocity: 3,
+        tension: 2,
+        friction: 8,
+        useNativeDriver: true,
+      }).start();
+    }
+  };
+
   const handleBackgroundChange = (color) => {
-    console.log(color);
     setBackgroundColor(color);
+  };
+
+  const handleLogOut = () => {
+    props.navigation.navigate('Welcome');
   };
 
   const handleProfileClick = () => {
     setProfileView(!profileView);
-
     Animated.spring(bounceValue, {
       toValue: profileView ? -250 : 0,
       velocity: 3,
@@ -227,26 +243,28 @@ export default function Chat(props) {
       >
         <ProfileSlide
           picturePress={() => handleProfileClick()}
-          backgroundChange={() => handleBackgroundChange()}
+          backgroundChange={(clr) => handleBackgroundChange(clr)}
           userName={userName}
           colors={colors}
           backgroundColor={backgroundColor}
+          logOut={() => handleLogOut()}
         />
       </Animated.View>
-
-      <View style={styles.chatBox}>
-        <GiftedChat
-          messages={messages}
-          renderSystemMessage={renderSystemMessage}
-          renderInputToolbar={renderInputToolbar}
-          renderDay={renderDay}
-          onSend={(messages) => onSend(messages)}
-          user={{
-            _id: 1,
-          }}
-          alignTop={false}
-        />
-      </View>
+      {/* <TouchableWithoutFeedback onPress={() => handleProfilePress()}> */}
+        <View style={styles.chatBox}>
+          <GiftedChat
+            messages={messages}
+            renderSystemMessage={renderSystemMessage}
+            renderInputToolbar={renderInputToolbar}
+            renderDay={renderDay}
+            onSend={(messages) => onSend(messages)}
+            user={{
+              _id: 1,
+            }}
+            alignTop={false}
+          />
+        </View>
+      {/* </TouchableWithoutFeedback> */}
     </View>
   );
 }
