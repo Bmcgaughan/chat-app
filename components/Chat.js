@@ -57,10 +57,11 @@ export default function Chat(props) {
   const [profileView, setProfileView] = useState(false);
   const [colorSpring, setColorSpring] = useState(false);
   const [colorMenuOpen, setColorMenuOpen] = useState(false);
+  const [colorMenuVisible, setColorMenuVisible] = useState(false);
   const [bounceValue, setBounceValue] = useState(new Animated.Value(-250));
   const [spinValue, setSpinValue] = useState(new Animated.Value(0));
   const [colorBounceValue, setColorBounceValue] = useState(
-    new Animated.Value(40)
+    new Animated.Value(-250)
   );
   const [backgroundColor, setBackgroundColor] = useState(
     props.route.params['backgroundColor']
@@ -209,13 +210,14 @@ export default function Chat(props) {
   const handleProfileClick = () => {
     setProfileView(!profileView);
     setColorSpring(false);
+
     Animated.spring(bounceValue, {
       toValue: profileView ? -250 : 0,
       velocity: 3,
       tension: 2,
       friction: 8,
       useNativeDriver: true,
-    }).start();
+    }).start(() => {});
     if (colorMenuOpen) {
       handleColorClose();
     }
@@ -232,7 +234,7 @@ export default function Chat(props) {
   const handleColorOpen = (colorSpringEvent) => {
     setColorMenuOpen(true);
     Animated.spring(colorBounceValue, {
-      toValue: colorSpringEvent ? 250 : 0,
+      toValue: colorSpringEvent ? 500 : 0,
       velocity: 3,
       tension: 2,
       friction: 8,
@@ -252,7 +254,7 @@ export default function Chat(props) {
     }, 700);
     setTimeout(() => {
       Animated.spring(colorBounceValue, {
-        toValue: !colorSpring ? 170 : 0,
+        toValue: !colorSpring ? 424 : 0,
         velocity: 3,
         tension: 2,
         friction: 8,
@@ -263,8 +265,9 @@ export default function Chat(props) {
 
   const handleColorClose = () => {
     setColorMenuOpen(false);
+
     Animated.spring(colorBounceValue, {
-      toValue: !colorSpring ? 0 : 250,
+      toValue: !colorSpring ? 0 : 500,
       velocity: 3,
       tension: 2,
       friction: 8,
@@ -290,7 +293,7 @@ export default function Chat(props) {
         tension: 2,
         friction: 8,
         useNativeDriver: true,
-      }).start();
+      }).start(() => {});
     }, 1000);
   };
 
@@ -356,13 +359,14 @@ export default function Chat(props) {
           ]}
         ></View>
       </TouchableWithoutFeedback>
+
       <Animated.View
         style={[
           styles.colorMenu,
           {
             transform: [{ translateX: colorBounceValue }, { rotate: spin }],
+            display: profileView ? null : 'none',
           },
-          { opacity: colorMenuOpen ? 1 : 0 },
         ]}
       >
         <ColorChooser
@@ -372,6 +376,7 @@ export default function Chat(props) {
           backgroundColor={backgroundColor}
         />
       </Animated.View>
+
       {/* <TouchableWithoutFeedback onPress={() => handleProfilePress()}> */}
       <View style={[styles.chatBox, { opacity: profileView ? 0.5 : 1 }]}>
         <GiftedChat
@@ -461,7 +466,7 @@ const styles = StyleSheet.create({
   colorMenu: {
     position: 'absolute',
     top: 210,
-    left: 0,
+    left: -250,
     width: 210,
     height: 60,
     zIndex: 80,
