@@ -328,10 +328,11 @@ export default function Chat(props) {
           onPress={() => handleProfileClick()}
         >
           <Image
-            source={require('../assets/profile.png')}
+            source={require('../assets/avatar.jpeg')}
             style={styles.profileIcon}
           />
         </TouchableOpacity>
+        <Text style={styles.topBarName}>Chat - App</Text>
       </View>
       <Animated.View
         style={[
@@ -385,8 +386,11 @@ export default function Chat(props) {
           renderInputToolbar={renderInputToolbar}
           renderDay={renderDay}
           onSend={(messages) => onSend(messages)}
+          showUserAvatar={true}
           user={{
+
             _id: 1,
+            avatar: 'https://avatars.githubusercontent.com/u/87346945?v=4',
           }}
           alignTop={false}
         />
@@ -411,11 +415,16 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingLeft: 10,
     width: '100%',
+    flexDirection: 'row',
     backgroundColor: 'white',
-    justifyContent: 'center',
+    alignItems: 'center',
     //align items to right
-    alignItems: 'flex-start',
     zIndex: 100,
+  },
+  topBarName: {
+    paddingLeft: 110,
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   header: {
     backgroundColor: '#fff',
@@ -443,6 +452,7 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: 'white',
     justifyContent: 'center',
+    borderRadius: 50,
   },
   profileView: {
     position: 'absolute',

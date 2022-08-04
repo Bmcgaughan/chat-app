@@ -31,7 +31,7 @@ export default function ProfileSlide(props) {
           onPress={() => handleClick()}
         >
           <Image
-            source={require('../assets/profile.png')}
+            source={require('../assets/avatar.jpeg')}
             style={styles.profileIcon}
           ></Image>
         </TouchableOpacity>
@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
   profileIcon: {
     height: '100%',
     width: '100%',
+    borderRadius: 50,
   },
   menuName: {
     height: 50,
