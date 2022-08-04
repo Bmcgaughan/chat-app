@@ -92,7 +92,7 @@ export default function Start(props) {
               onChangeText={(text) => handleUserInput(text)}
               value={userName.text}
               placeholder={'\t\t\t\t\tYour Name'}
-              clearTextOnFocus={true}
+              clearTextOnFocus={false}
             />
           </View>
           <Text style={styles.chooseText}>Choose Background Color</Text>

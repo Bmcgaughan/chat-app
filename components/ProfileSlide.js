@@ -4,14 +4,14 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
-  Platform,
-  StatusBar,
   TouchableOpacity,
   Image,
+  Animated,
 } from 'react-native';
 
 export default function ProfileSlide(props) {
+  const [bounceValue, setBounceValue] = useState(new Animated.Value(-250));
+
   const { colors, backgroundColor } = props;
   useEffect(() => {}, []);
 
@@ -22,7 +22,6 @@ export default function ProfileSlide(props) {
   const handleBackgroundChange = (color) => {
     props.backgroundChange(color);
   };
-
 
   return (
     <View style={styles.container}>
@@ -41,60 +40,64 @@ export default function ProfileSlide(props) {
         <Text style={styles.userNameText}>{props.userName}</Text>
       </View>
       <View style={styles.menuItem}>
+        <Image
+          source={require('../assets/colorchoose.png')}
+          style={styles.menuIcon}
+        />
         <Text style={styles.text}>Change Background Color</Text>
-        <View style={styles.colorChooseWrapper}>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={[
-              styles.colorIcon,
-              {
-                backgroundColor: colors.black,
-                borderWidth: backgroundColor === colors.black ? 3 : 0,
-                borderColor: backgroundColor === colors.black ? 'red' : '#000',
-              },
-            ]}
-            onPress={() => handleBackgroundChange(colors.black)}
-          ></TouchableOpacity>
-          <TouchableOpacity
-            accessible={true}
-            accessibilityRole="button"
-            style={[
-              styles.colorIcon,
-              {
-                backgroundColor: colors.purple,
-                borderWidth: backgroundColor === colors.purple ? 3 : 0,
-                borderColor: backgroundColor === colors.purple ? 'red' : '#000',
-              },
-            ]}
-            onPress={() => props.backgroundChange(colors.purple)}
-          ></TouchableOpacity>
-          <TouchableOpacity
-            accessible={true}
-            accessibilityRole="button"
-            style={[
-              styles.colorIcon,
-              {
-                backgroundColor: colors.grey,
-                borderWidth: backgroundColor === colors.grey ? 3 : 0,
-                borderColor: backgroundColor === colors.grey ? 'red' : '#000',
-              },
-            ]}
-            onPress={() => props.backgroundChange(colors.grey)}
-          ></TouchableOpacity>
-          <TouchableOpacity
-            accessible={true}
-            accessibilityRole="button"
-            style={[
-              styles.colorIcon,
-              {
-                backgroundColor: colors.green,
-                borderWidth: backgroundColor === colors.green ? 3 : 0,
-                borderColor: backgroundColor === colors.green ? 'red' : '#000',
-              },
-            ]}
-            onPress={() => props.backgroundChange(colors.green)}
-          ></TouchableOpacity>
-        </View>
+      </View>
+      <View style={styles.colorChooseWrapper}>
+        <TouchableOpacity
+          accessibilityRole="button"
+          style={[
+            styles.colorIcon,
+            {
+              backgroundColor: colors.black,
+              borderWidth: backgroundColor === colors.black ? 3 : 0,
+              borderColor: backgroundColor === colors.black ? 'red' : '#000',
+            },
+          ]}
+          onPress={() => handleBackgroundChange(colors.black)}
+        ></TouchableOpacity>
+        <TouchableOpacity
+          accessible={true}
+          accessibilityRole="button"
+          style={[
+            styles.colorIcon,
+            {
+              backgroundColor: colors.purple,
+              borderWidth: backgroundColor === colors.purple ? 3 : 0,
+              borderColor: backgroundColor === colors.purple ? 'red' : '#000',
+            },
+          ]}
+          onPress={() => props.backgroundChange(colors.purple)}
+        ></TouchableOpacity>
+        <TouchableOpacity
+          accessible={true}
+          accessibilityRole="button"
+          style={[
+            styles.colorIcon,
+            {
+              backgroundColor: colors.grey,
+              borderWidth: backgroundColor === colors.grey ? 3 : 0,
+              borderColor: backgroundColor === colors.grey ? 'red' : '#000',
+            },
+          ]}
+          onPress={() => props.backgroundChange(colors.grey)}
+        ></TouchableOpacity>
+        <TouchableOpacity
+          accessible={true}
+          accessibilityRole="button"
+          style={[
+            styles.colorIcon,
+            {
+              backgroundColor: colors.green,
+              borderWidth: backgroundColor === colors.green ? 3 : 0,
+              borderColor: backgroundColor === colors.green ? 'red' : '#000',
+            },
+          ]}
+          onPress={() => props.backgroundChange(colors.green)}
+        ></TouchableOpacity>
       </View>
       <View style={styles.logOut}>
         <TouchableOpacity
@@ -136,9 +139,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   menuItem: {
+    flexDirection: 'row',
     alignItems: 'flex-start',
     paddingLeft: 20,
   },
+  menuIcon: {
+    height: 20,
+    width: 20,
+    marginRight: 10,
+  },
+
   userNameText: {
     fontSize: 20,
   },
@@ -146,16 +156,16 @@ const styles = StyleSheet.create({
 
   colorChooseWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'flex-start',
     paddingTop: 20,
+    margin: 0,
   },
 
   colorIcon: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    marginRight: 5,
+    marginRight: 0,
   },
   logOut: {
     flex: 1,

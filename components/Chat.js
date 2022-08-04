@@ -216,7 +216,7 @@ export default function Chat(props) {
 
   return (
     <View style={[styles.container, { backgroundColor: backgroundColor }]}>
-      <View style={styles.topBar}>
+      <View style={[styles.topBar]}>
         <TouchableOpacity
           accessibilityRole="button"
           style={[
@@ -249,21 +249,29 @@ export default function Chat(props) {
           backgroundColor={backgroundColor}
           logOut={() => handleLogOut()}
         />
+        <TouchableWithoutFeedback onPress={() => handleProfilePress()}>
+          <View
+            style={[
+              styles.profileBorder,
+              { display: profileView ? 'flex' : 'none' },
+            ]}
+          ></View>
+        </TouchableWithoutFeedback>
       </Animated.View>
       {/* <TouchableWithoutFeedback onPress={() => handleProfilePress()}> */}
-        <View style={styles.chatBox}>
-          <GiftedChat
-            messages={messages}
-            renderSystemMessage={renderSystemMessage}
-            renderInputToolbar={renderInputToolbar}
-            renderDay={renderDay}
-            onSend={(messages) => onSend(messages)}
-            user={{
-              _id: 1,
-            }}
-            alignTop={false}
-          />
-        </View>
+      <View style={[styles.chatBox, { opacity: profileView ? 0.5 : 1 }]}>
+        <GiftedChat
+          messages={messages}
+          renderSystemMessage={renderSystemMessage}
+          renderInputToolbar={renderInputToolbar}
+          renderDay={renderDay}
+          onSend={(messages) => onSend(messages)}
+          user={{
+            _id: 1,
+          }}
+          alignTop={false}
+        />
+      </View>
       {/* </TouchableWithoutFeedback> */}
     </View>
   );
@@ -324,5 +332,13 @@ const styles = StyleSheet.create({
     width: 250,
     backgroundColor: 'white',
     zIndex: 100,
+  },
+  profileBorder: {
+    position: 'absolute',
+    top: 0,
+    left: 250,
+    width: '100%',
+    height: '100%',
+    opacity: 0,
   },
 });
