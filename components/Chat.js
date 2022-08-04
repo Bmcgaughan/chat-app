@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 
 import ProfileSlide from './ProfileSlide.js';
+import ColorChooser from './ColorChooser.js';
 
 import {
   StyleSheet,
@@ -15,6 +16,7 @@ import {
   TouchableOpacity,
   Image,
   Animated,
+  Easing,
   TouchableWithoutFeedback,
 } from 'react-native';
 
@@ -53,8 +55,13 @@ export default function Chat(props) {
   const [messages, setMessages] = useState([]);
   const [isConnected, setIsConnected] = useState();
   const [profileView, setProfileView] = useState(false);
-  const [userAvatar, setUserAvatar] = useState();
+  const [colorSpring, setColorSpring] = useState(false);
+  const [colorMenuOpen, setColorMenuOpen] = useState(false);
   const [bounceValue, setBounceValue] = useState(new Animated.Value(-250));
+  const [spinValue, setSpinValue] = useState(new Animated.Value(0));
+  const [colorBounceValue, setColorBounceValue] = useState(
+    new Animated.Value(40)
+  );
   const [backgroundColor, setBackgroundColor] = useState(
     props.route.params['backgroundColor']
   );
@@ -182,9 +189,10 @@ export default function Chat(props) {
     }
   };
 
-  const handleProfilePress = () => {
+  const handleOutsideProfilePress = () => {
     if (profileView) {
       setProfileView(false);
+      setColorSpring(false);
       Animated.spring(bounceValue, {
         toValue: profileView ? -250 : 0,
         velocity: 3,
@@ -192,6 +200,24 @@ export default function Chat(props) {
         friction: 8,
         useNativeDriver: true,
       }).start();
+      if (colorMenuOpen) {
+        handleColorClose();
+      }
+    }
+  };
+
+  const handleProfileClick = () => {
+    setProfileView(!profileView);
+    setColorSpring(false);
+    Animated.spring(bounceValue, {
+      toValue: profileView ? -250 : 0,
+      velocity: 3,
+      tension: 2,
+      friction: 8,
+      useNativeDriver: true,
+    }).start();
+    if (colorMenuOpen) {
+      handleColorClose();
     }
   };
 
@@ -203,16 +229,87 @@ export default function Chat(props) {
     props.navigation.navigate('Welcome');
   };
 
-  const handleProfileClick = () => {
-    setProfileView(!profileView);
-    Animated.spring(bounceValue, {
-      toValue: profileView ? -250 : 0,
+  const handleColorOpen = (colorSpringEvent) => {
+    setColorMenuOpen(true);
+    Animated.spring(colorBounceValue, {
+      toValue: colorSpringEvent ? 250 : 0,
       velocity: 3,
       tension: 2,
       friction: 8,
       useNativeDriver: true,
     }).start();
+
+    //set delay for spring animation
+    setTimeout(() => {
+      Animated.timing(spinValue, {
+        toValue: spinValue._value === 0 ? 1 : 0,
+        duration: 300,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }).start(() => {
+        spinValue.setValue(spinValue._value === 1 ? 0 : 1);
+      });
+    }, 700);
+    setTimeout(() => {
+      Animated.spring(colorBounceValue, {
+        toValue: !colorSpring ? 170 : 0,
+        velocity: 3,
+        tension: 2,
+        friction: 8,
+        useNativeDriver: true,
+      }).start();
+    }, 1000);
   };
+
+  const handleColorClose = () => {
+    setColorMenuOpen(false);
+    Animated.spring(colorBounceValue, {
+      toValue: !colorSpring ? 0 : 250,
+      velocity: 3,
+      tension: 2,
+      friction: 8,
+      useNativeDriver: true,
+    }).start();
+
+    //set delay for spring animation
+    setTimeout(() => {
+      Animated.timing(spinValue, {
+        toValue: spinValue._value === 0 ? 1 : 0,
+        duration: 300,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }).start(() => {
+        spinValue.setValue(spinValue._value === 1 ? 0 : 1);
+      });
+    }, 700);
+
+    setTimeout(() => {
+      Animated.spring(colorBounceValue, {
+        toValue: !colorSpring ? 170 : 0,
+        velocity: 3,
+        tension: 2,
+        friction: 8,
+        useNativeDriver: true,
+      }).start();
+    }, 1000);
+  };
+
+  //running color menu pop out animations depeding on the click
+  const handleEdit = () => {
+    let colorSpringEvent = !colorSpring;
+    setColorSpring(!colorSpring);
+
+    if (colorSpringEvent) {
+      handleColorOpen(colorSpringEvent);
+    } else {
+      handleColorClose();
+    }
+  };
+
+  const spin = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '90deg'],
+  });
 
   return (
     <View style={[styles.container, { backgroundColor: backgroundColor }]}>
@@ -244,19 +341,36 @@ export default function Chat(props) {
         <ProfileSlide
           picturePress={() => handleProfileClick()}
           backgroundChange={(clr) => handleBackgroundChange(clr)}
+          handleEdit={() => handleEdit()}
           userName={userName}
           colors={colors}
           backgroundColor={backgroundColor}
           logOut={() => handleLogOut()}
         />
-        <TouchableWithoutFeedback onPress={() => handleProfilePress()}>
-          <View
-            style={[
-              styles.profileBorder,
-              { display: profileView ? 'flex' : 'none' },
-            ]}
-          ></View>
-        </TouchableWithoutFeedback>
+      </Animated.View>
+      <TouchableWithoutFeedback onPress={() => handleOutsideProfilePress()}>
+        <View
+          style={[
+            styles.profileBorder,
+            { display: profileView ? null : 'none' },
+          ]}
+        ></View>
+      </TouchableWithoutFeedback>
+      <Animated.View
+        style={[
+          styles.colorMenu,
+          {
+            transform: [{ translateX: colorBounceValue }, { rotate: spin }],
+          },
+          { opacity: colorMenuOpen ? 1 : 0 },
+        ]}
+      >
+        <ColorChooser
+          backgroundChange={(clr) => handleBackgroundChange(clr)}
+          userName={userName}
+          colors={colors}
+          backgroundColor={backgroundColor}
+        />
       </Animated.View>
       {/* <TouchableWithoutFeedback onPress={() => handleProfilePress()}> */}
       <View style={[styles.chatBox, { opacity: profileView ? 0.5 : 1 }]}>
@@ -285,6 +399,7 @@ const styles = StyleSheet.create({
     flex: 1,
     //if android
     marginTop: Platform.OS === 'android' ? -StatusBar.currentHeight : 0,
+    zIndex: 50,
   },
   topBar: {
     height: StatusBar.currentHeight + 50,
@@ -331,14 +446,26 @@ const styles = StyleSheet.create({
     height: '100%',
     width: 250,
     backgroundColor: 'white',
-    zIndex: 100,
+    zIndex: 200,
   },
   profileBorder: {
     position: 'absolute',
     top: 0,
     left: 250,
-    width: '100%',
+    width: 175,
     height: '100%',
-    opacity: 0,
+    // opacity: 0,
+    zIndex: 75,
+    elevation: 75,
+  },
+  colorMenu: {
+    position: 'absolute',
+    top: 210,
+    left: 0,
+    width: 210,
+    height: 60,
+    zIndex: 80,
+    elevation: 80,
+    backgroundColor: 'white',
   },
 });
