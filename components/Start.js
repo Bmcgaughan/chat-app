@@ -48,13 +48,11 @@ export default function Start(props) {
     if (!userName.text || userName.text === '') {
       setUserNameAlert(true);
     } else {
-      props.navigation.navigate('Theme', {
-      })
-      // props.navigation.navigate('Chat', {
-      //   userName: userName.text,
-      //   backgroundColor: backgroundColor,
-      //   colors: colors,
-      // });
+      props.navigation.navigate('Chat', {
+        userName: userName.text,
+        backgroundColor: backgroundColor,
+        colors: colors,
+      });
     }
   };
 

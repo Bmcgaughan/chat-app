@@ -22,6 +22,10 @@ export default function ProfileSlide(props) {
     props.handleEdit();
   };
 
+  const handleDarkMode = () => {
+    props.handleDarkMode();
+  };
+
   return (
     <View style={styles.container}>
       <Animated.View style={styles.colorChooseWrapper}></Animated.View>
@@ -46,6 +50,15 @@ export default function ProfileSlide(props) {
         />
         <TouchableOpacity onPress={() => handleColorChooser()}>
           <Text style={styles.text}>Change Background Color</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.menuItem}>
+        <Image
+          source={require('../assets/light.png')}
+          style={styles.menuIcon}
+        />
+        <TouchableOpacity onPress={() => handleDarkMode()}>
+          <Text style={styles.text}>Dark Mode</Text>
         </TouchableOpacity>
       </View>
 
@@ -94,6 +107,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     paddingLeft: 20,
+    paddingBottom: 20,
   },
   menuIcon: {
     height: 20,
@@ -104,7 +118,9 @@ const styles = StyleSheet.create({
   userNameText: {
     fontSize: 20,
   },
-  text: {},
+  text: {
+    fontSize: 15,
+  },
 
   logOut: {
     flex: 1,

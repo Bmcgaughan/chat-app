@@ -67,6 +67,8 @@ export default function Chat(props) {
   const [backgroundColor, setBackgroundColor] = useState(
     props.route.params['backgroundColor']
   );
+  const [darkMode, setDarkMode] = useState(false);
+  const [themeChooser, setthemeChooser] = useState(false);
   const { userName, colors } = props.route.params;
 
   //component mounting check if user is connected to internet
@@ -310,6 +312,15 @@ export default function Chat(props) {
     }
   };
 
+  const handleDarkMode = () => {
+    handleProfileClick();
+    setthemeChooser(true);
+  };
+
+  const handleShowHideTheme = () => {
+    setthemeChooser(!themeChooser);
+  };
+
   const spin = spinValue.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '90deg'],
@@ -348,6 +359,7 @@ export default function Chat(props) {
           picturePress={() => handleProfileClick()}
           backgroundChange={(clr) => handleBackgroundChange(clr)}
           handleEdit={() => handleEdit()}
+          handleDarkMode={() => handleDarkMode()}
           userName={userName}
           colors={colors}
           backgroundColor={backgroundColor}
@@ -393,9 +405,11 @@ export default function Chat(props) {
           alignTop={false}
         />
       </View>
-      <View style={styles.themeMenu}>
-        <ThemeChooser />
-      </View>
+      {themeChooser && (
+        <View style={styles.themeMenu}>
+          <ThemeChooser showHideTheme={() => handleShowHideTheme()} />
+        </View>
+      )}
     </View>
   );
 }
@@ -491,10 +505,10 @@ const styles = StyleSheet.create({
     elevation: 80,
     backgroundColor: 'white',
   },
-  // themeMenu: {
-  //   position: 'absolute',
-  //   bottom: 0,
-  //   left: 0,
-  //   width: '100%',
-  // },
+  themeMenu: {
+    position: 'absolute',
+    width: '100%',
+    zIndex: 500,
+    elevation: 500,
+  },
 });
