@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Animated, View, Text, Image } from 'react-native';
+
+import { RadioButton } from 'react-native-paper';
+
 import { createResponder } from 'react-native-gesture-responder';
 
 export default class ThemeChooser extends Component {
@@ -78,6 +81,15 @@ export default class ThemeChooser extends Component {
         <View style={styles.menuHeader}>
           <Text style={styles.menuText}>Dark Mode</Text>
         </View>
+
+        <View style={styles.menuBody}>
+          <Text style={styles.menuItemText}>On</Text>
+          <RadioButton value="first" status={'checked'} />  
+        </View>
+        <View style={styles.menuBody}>
+          <Text style={styles.menuItemText}>Off</Text>
+          <RadioButton value="first" status={'checked'} />  
+        </View>
       </Animated.View>
     );
   }
@@ -111,11 +123,23 @@ const styles = StyleSheet.create({
   menuHeader: {
     width: '100%',
     paddingTop: 10,
-    borderBottomWidth: .5,
-
+    borderBottomWidth: 0.5,
   },
   menuText: {
     paddingLeft: 20,
     fontSize: 25,
+  },
+  menuBody: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    alignItems: 'center',
+    paddingLeft: 40,
+    paddingRight: 40,
+    paddingBottom: 50,
+    paddingTop: 20,
+  },
+  menuItemText: {
+    fontSize: 20,
   },
 });
