@@ -12,7 +12,7 @@ import {
 export default function ProfileSlide(props) {
   const [bounceValue, setBounceValue] = useState(new Animated.Value(-55));
 
-  const { colors, backgroundColor } = props;
+  const { colors, backgroundColor, darkMode } = props;
 
   const handleClick = () => {
     props.picturePress();
@@ -27,7 +27,14 @@ export default function ProfileSlide(props) {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: darkMode ? 'black' : 'white' },
+        { borderRightWidth: darkMode ? .5 : 0 },
+        { borderRightColor: darkMode ? 'white' : 'white' },
+      ]}
+    >
       <Animated.View style={styles.colorChooseWrapper}></Animated.View>
       <View style={styles.profileWrapper}>
         <TouchableOpacity
@@ -41,7 +48,7 @@ export default function ProfileSlide(props) {
         </TouchableOpacity>
       </View>
       <View style={styles.menuName}>
-        <Text style={styles.userNameText}>{props.userName}</Text>
+        <Text style={[styles.userNameText,{ color: darkMode ? 'white' : 'black' } ]}>{props.userName}</Text>
       </View>
       <View style={styles.menuItem}>
         <Image
@@ -49,16 +56,17 @@ export default function ProfileSlide(props) {
           style={styles.menuIcon}
         />
         <TouchableOpacity onPress={() => handleColorChooser()}>
-          <Text style={styles.text}>Change Background Color</Text>
+          <Text style={[styles.text, { color: darkMode ? 'white' : 'black' }]}>Change Background Color</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.menuItem}>
         <Image
           source={require('../assets/light.png')}
           style={styles.menuIcon}
+          backgroundColor={darkMode ? 'black' : 'white'}
         />
         <TouchableOpacity onPress={() => handleDarkMode()}>
-          <Text style={styles.text}>Dark Mode</Text>
+          <Text style={[styles.text, { color: darkMode ? 'white' : 'black' }]}>Dark Mode</Text>
         </TouchableOpacity>
       </View>
 
@@ -68,11 +76,12 @@ export default function ProfileSlide(props) {
           accessibilityRole="button"
           onPress={() => props.logOut()}
         >
-          <Text style={styles.logOutText}>Log Out</Text>
+          <Text style={[styles.logOutText, { color: darkMode ? 'white' : 'black' }]}>Log Out</Text>
         </TouchableOpacity>
         <Image
           source={require('../assets/logOut.png')}
           style={styles.logOutIcon}
+          backgroundColor={darkMode ? 'white' : 'white'}
         />
       </View>
     </View>

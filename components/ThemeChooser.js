@@ -22,7 +22,7 @@ class ThemeChooser extends Component {
       showBar: true,
       bounceValue: new Animated.Value(1000),
       menuBounce: new Animated.Value(1000),
-      darkMode: false,
+      darkMode: props.isDarkMode,
     };
 
     this.Responder = createResponder({
@@ -104,7 +104,7 @@ class ThemeChooser extends Component {
   }
 
   setChecked() {
-    console.log('clicked');
+    this.props.darkMode(!this.state.darkMode);
     this.setState({ darkMode: !this.state.darkMode });
   }
 
@@ -152,7 +152,14 @@ class ThemeChooser extends Component {
               { backgroundColor: this.state.darkMode ? 'black' : 'white' },
             ]}
           >
-            <Text style={[styles.menuText, { color: this.state.darkMode ? 'white' : 'black' }]}>Dark Mode</Text>
+            <Text
+              style={[
+                styles.menuText,
+                { color: this.state.darkMode ? 'white' : 'black' },
+              ]}
+            >
+              Dark Mode
+            </Text>
           </View>
 
           <View
@@ -188,7 +195,6 @@ class ThemeChooser extends Component {
               style={[
                 styles.menuRow,
                 { backgroundColor: this.state.darkMode ? 'black' : 'white' },
-                
               ]}
             >
               <Text

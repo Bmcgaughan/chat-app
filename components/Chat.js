@@ -317,6 +317,10 @@ export default function Chat(props) {
     setthemeChooser(true);
   };
 
+  const getDarkMode = (dm) => {
+    setDarkMode(dm);
+  };
+
   const handleShowHideTheme = () => {
     setthemeChooser(!themeChooser);
   };
@@ -328,7 +332,14 @@ export default function Chat(props) {
 
   return (
     <View style={[styles.container, { backgroundColor: backgroundColor }]}>
-      <View style={[styles.topBar]}>
+      <View
+        style={[
+          styles.topBar,
+          { backgroundColor: darkMode ? 'black' : 'white' },
+          { borderBottomWidth: darkMode ? .5 : 0 },
+          { borderBottomColor: darkMode ? 'white' : 'black' },
+        ]}
+      >
         <TouchableOpacity
           accessibilityRole="button"
           style={[
@@ -344,7 +355,11 @@ export default function Chat(props) {
             style={styles.profileIcon}
           />
         </TouchableOpacity>
-        <Text style={styles.topBarName}>Chat - App</Text>
+        <Text
+          style={[styles.topBarName, { color: darkMode ? 'white' : 'black' }]}
+        >
+          Chat - App
+        </Text>
       </View>
       <Animated.View
         style={[
@@ -364,6 +379,7 @@ export default function Chat(props) {
           colors={colors}
           backgroundColor={backgroundColor}
           logOut={() => handleLogOut()}
+          darkMode={darkMode}
         />
       </Animated.View>
       <TouchableWithoutFeedback onPress={() => handleOutsideProfilePress()}>
@@ -407,7 +423,11 @@ export default function Chat(props) {
       </View>
       {themeChooser && (
         <View style={styles.themeMenu}>
-          <ThemeChooser showHideTheme={() => handleShowHideTheme()} />
+          <ThemeChooser
+            showHideTheme={() => handleShowHideTheme()}
+            isDarkMode={darkMode}
+            darkMode={(dm) => getDarkMode(dm)}
+          />
         </View>
       )}
     </View>
@@ -430,7 +450,6 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: 'white',
     alignItems: 'center',
     //align items to right
     zIndex: 100,
