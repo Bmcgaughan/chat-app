@@ -36,7 +36,6 @@ export default function Start(props) {
 
   const handleUserInput = (text) => {
     if (text.length > 0) {
-      setSearchIcon(false);
       setUserNameAlert(false);
     } else {
       setSearchIcon(true);
@@ -60,14 +59,6 @@ export default function Start(props) {
     setBackgroundColor(color);
   };
 
-  useEffect(() => {
-    setUserNameAlert(false);
-    if (userName.text === '') {
-      setSearchIcon(true);
-    } else {
-      setSearchIcon(false);
-    }
-  }, []);
 
   return (
     <View style={[styles.container, { height: height }]}>
@@ -97,7 +88,7 @@ export default function Start(props) {
               style={styles.textInput}
               onChangeText={(text) => handleUserInput(text)}
               value={userName.text}
-              placeholder={'\t\t\t\t\tYour Name'}
+              placeholder={'Your Name'}
               clearTextOnFocus={false}
             />
           </View>
@@ -177,6 +168,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
+    paddingLeft: 50
   },
 
   chooseText: {
