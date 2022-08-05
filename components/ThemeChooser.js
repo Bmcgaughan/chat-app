@@ -21,6 +21,7 @@ class ThemeChooser extends Component {
       y: new Animated.Value(0),
       showBar: true,
       bounceValue: new Animated.Value(1000),
+      menuBounce: new Animated.Value(1000),
       darkMode: false,
     };
 
@@ -33,11 +34,15 @@ class ThemeChooser extends Component {
         this.pan(gestureState);
       },
       onPanResponderTerminationRequest: () => true,
+      onResponderSingleTapConfirmed: (evt, gestureState) => {},
     });
   }
 
   componentDidMount() {
-    this.handleTransition('up');
+    this.handleMenuTransition('up');
+    setTimeout(() => {
+      this.handleDragTransition('up');
+    }, 105);
   }
 
   pan = (gestureState) => {
@@ -65,13 +70,15 @@ class ThemeChooser extends Component {
     }
 
     if (newY > 120) {
-      this.handleTransition('down');
+      this.handleMenuTransition('down');
+
+      this.handleDragTransition('down');
     }
     x.setValue(newX);
     y.setValue(newY);
   };
 
-  handleTransition(direction) {
+  handleDragTransition(direction) {
     Animated.spring(this.state.bounceValue, {
       toValue: direction === 'down' ? 1000 : 600,
       velocity: 3,
@@ -86,15 +93,28 @@ class ThemeChooser extends Component {
     });
   }
 
+  handleMenuTransition(direction) {
+    Animated.spring(this.state.menuBounce, {
+      toValue: direction === 'down' ? 1000 : 0,
+      velocity: 3,
+      tension: 2,
+      friction: 8,
+      useNativeDriver: false,
+    }).start();
+  }
+
   setChecked() {
     console.log('clicked');
     this.setState({ darkMode: !this.state.darkMode });
   }
 
   render() {
-    const { x, y, bounceValue, darkMode } = this.state;
+    const { x, y, bounceValue, menuBounce, darkMode } = this.state;
     const imageStyle = { left: x, top: y };
 
+    const menuYOffset = new Animated.Value(y._value + 600);
+
+    const menuSyle = { left: x, top: y };
 
     return (
       <View style={{ flex: 1 }}>
@@ -102,6 +122,7 @@ class ThemeChooser extends Component {
           style={[
             { display: this.state.showBar ? null : 'none' },
             styles.dragContainer,
+            { backgroundColor: this.state.darkMode ? 'black' : 'white' },
             imageStyle,
             {
               transform: [{ translateY: bounceValue }],
@@ -115,29 +136,79 @@ class ThemeChooser extends Component {
               source={require('../assets/line.png')}
             />
           </View>
-          <View style={styles.menuHeader}>
-            <Text style={styles.menuText}>Dark Mode</Text>
+        </Animated.View>
+
+        <Animated.View
+          style={[
+            menuSyle,
+            {
+              transform: [{ translateY: menuBounce }],
+            },
+          ]}
+        >
+          <View
+            style={[
+              styles.menuHeader,
+              { backgroundColor: this.state.darkMode ? 'black' : 'white' },
+            ]}
+          >
+            <Text style={[styles.menuText, { color: this.state.darkMode ? 'white' : 'black' }]}>Dark Mode</Text>
           </View>
 
-          <View style={styles.menuBody}>
-            <Text style={styles.menuItemText}>On</Text>
-            <RadioButton
-              value="first"
-              status={darkMode ? 'checked' : 'unchecked'}
-              onPress={() => this.setChecked()}
-              disabled={false}
-            />
+          <View
+            style={[
+              styles.menuBody,
+              { backgroundColor: this.state.darkMode ? 'black' : 'white' },
+            ]}
+          >
+            <View
+              style={[
+                styles.menuRow,
+                { backgroundColor: this.state.darkMode ? 'black' : 'white' },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.menuItemText,
+                  { color: this.state.darkMode ? 'white' : 'black' },
+                ]}
+              >
+                On
+              </Text>
+              <RadioButton
+                value="first"
+                status={darkMode ? 'checked' : 'unchecked'}
+                onPress={() => this.setChecked()}
+                disabled={false}
+                color={darkMode ? 'white' : 'black'}
+                uncheckedColor={darkMode ? 'white' : 'black'}
+              />
+            </View>
+            <View
+              style={[
+                styles.menuRow,
+                { backgroundColor: this.state.darkMode ? 'black' : 'white' },
+                
+              ]}
+            >
+              <Text
+                style={[
+                  styles.menuItemText,
+                  { color: this.state.darkMode ? 'white' : 'black' },
+                ]}
+              >
+                Off
+              </Text>
+              <RadioButton
+                value="second"
+                status={darkMode ? 'unchecked' : 'checked'}
+                onPress={() => this.setChecked()}
+                disabled={false}
+                color={darkMode ? 'white' : 'black'}
+                uncheckedColor={darkMode ? 'white' : 'black'}
+              />
+            </View>
           </View>
-          <View style={styles.menuBody}>
-            <Text style={styles.menuItemText}>Off</Text>
-            <RadioButton
-              value="second"
-              status={darkMode ? 'unchecked' : 'checked'}
-              onPress={() => this.setChecked()}
-              disabled={false}
-            />
-          </View>
-
         </Animated.View>
       </View>
     );
@@ -147,13 +218,11 @@ class ThemeChooser extends Component {
 const styles = StyleSheet.create({
   dragContainer: {
     width: '100%',
-    height: 500,
-    backgroundColor: 'red',
+    height: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
   dragTop: {
-    position: 'absolute',
     width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -168,25 +237,34 @@ const styles = StyleSheet.create({
     width: 50,
   },
   menuHeader: {
+    top: 600,
+    height: 50,
     width: '100%',
     paddingTop: 10,
-    borderBottomWidth: 0.5,
   },
   menuText: {
     paddingLeft: 20,
     fontSize: 25,
   },
   menuBody: {
-    flexDirection: 'row',
+    top: 600,
+    flexDirection: 'column',
     justifyContent: 'space-between',
     width: '100%',
+    height: 230,
     alignItems: 'center',
     paddingLeft: 40,
     paddingRight: 40,
     paddingBottom: 50,
     paddingTop: 20,
-    backgroundColor: '#fff',
   },
+  menuRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+
   menuItemText: {
     fontSize: 20,
   },
