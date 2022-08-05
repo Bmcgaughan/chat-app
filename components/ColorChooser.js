@@ -1,13 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Animated,
-} from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 
 const colors = {
   black: '#090C08',
@@ -16,11 +9,20 @@ const colors = {
   green: '#B9C6AE',
 };
 
+//takes current background color
+//can take a click function as a prop backgroundChange
+//can take optional styles as a prop
+
 export default function ColorChooser(props) {
-  const { backgroundColor } = props;
+  const [backgroundColor, setBackgroundColor] = useState(
+    props.backgroundColor ? props : 'black'
+  );
 
   const handleBackgroundChange = (color) => {
-    props.backgroundChange(color);
+    setBackgroundColor(color);
+    if (props.backgroundChange) {
+      props.backgroundChange(color);
+    }
   };
 
   return (
@@ -48,7 +50,7 @@ export default function ColorChooser(props) {
             borderColor: backgroundColor === colors.purple ? 'red' : '#000',
           },
         ]}
-        onPress={() => props.backgroundChange(colors.purple)}
+        onPress={() => handleBackgroundChange(colors.purple)}
       ></TouchableOpacity>
       <TouchableOpacity
         accessible={true}
@@ -61,7 +63,7 @@ export default function ColorChooser(props) {
             borderColor: backgroundColor === colors.grey ? 'red' : '#000',
           },
         ]}
-        onPress={() => props.backgroundChange(colors.grey)}
+        onPress={() => handleBackgroundChange(colors.grey)}
       ></TouchableOpacity>
       <TouchableOpacity
         accessible={true}
@@ -74,7 +76,7 @@ export default function ColorChooser(props) {
             borderColor: backgroundColor === colors.green ? 'red' : '#000',
           },
         ]}
-        onPress={() => props.backgroundChange(colors.green)}
+        onPress={() => handleBackgroundChange(colors.green)}
       ></TouchableOpacity>
     </View>
   );

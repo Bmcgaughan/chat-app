@@ -48,11 +48,13 @@ export default function Start(props) {
     if (!userName.text || userName.text === '') {
       setUserNameAlert(true);
     } else {
-      props.navigation.navigate('Chat', {
-        userName: userName.text,
-        backgroundColor: backgroundColor,
-        colors: colors,
-      });
+      props.navigation.navigate('Theme', {
+      })
+      // props.navigation.navigate('Chat', {
+      //   userName: userName.text,
+      //   backgroundColor: backgroundColor,
+      //   colors: colors,
+      // });
     }
   };
 
@@ -104,8 +106,9 @@ export default function Start(props) {
           <Text style={styles.chooseText}>Choose Background Color</Text>
 
           <View style={styles.colorChooseWrapper}>
+            {/* takes current backgroundColor, click function called backgroundChange, and optional styles */}
             <ColorChooser
-              backgroundColor={backgroundColor}
+              // backgroundColor={backgroundColor}
               backgroundChange={(clr) => handleBackgroundColor(clr)}
               style={styles.colorChooseWrapper}
             />

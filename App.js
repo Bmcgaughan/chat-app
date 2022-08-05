@@ -5,6 +5,7 @@ import 'react-native-gesture-handler';
 import Chat from './components/Chat';
 import Start from './components/Start';
 import ProfileSlide from './components/ProfileSlide';
+import ThemeChooser from './components/ThemeChooser';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -22,6 +23,7 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Profile" component={ProfileSlide} />
+        <Stack.Screen name="Theme" component={ThemeChooser} />
       </Stack.Navigator>
     </NavigationContainer>
   );

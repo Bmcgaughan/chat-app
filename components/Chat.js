@@ -5,6 +5,7 @@ import NetInfo from '@react-native-community/netinfo';
 
 import ProfileSlide from './ProfileSlide.js';
 import ColorChooser from './ColorChooser.js';
+import ThemeChooser from './ThemeChooser.js';
 
 import {
   StyleSheet,
@@ -342,6 +343,7 @@ export default function Chat(props) {
           },
         ]}
       >
+        {/* //component to contain profile icons and menu items */}
         <ProfileSlide
           picturePress={() => handleProfileClick()}
           backgroundChange={(clr) => handleBackgroundChange(clr)}
@@ -360,7 +362,6 @@ export default function Chat(props) {
           ]}
         ></View>
       </TouchableWithoutFeedback>
-
       <Animated.View
         style={[
           styles.colorMenu,
@@ -370,14 +371,13 @@ export default function Chat(props) {
           },
         ]}
       >
+        {/* takes click function called backgroundChange and optional styles */}
         <ColorChooser
           backgroundChange={(clr) => handleBackgroundChange(clr)}
           backgroundColor={backgroundColor}
           style={styles.colorChooseWrapper}
         />
       </Animated.View>
-
-      {/* <TouchableWithoutFeedback onPress={() => handleProfilePress()}> */}
       <View style={[styles.chatBox, { opacity: profileView ? 0.5 : 1 }]}>
         <GiftedChat
           messages={messages}
@@ -393,7 +393,9 @@ export default function Chat(props) {
           alignTop={false}
         />
       </View>
-      {/* </TouchableWithoutFeedback> */}
+      <View style={styles.themeMenu}>
+        <ThemeChooser />
+      </View>
     </View>
   );
 }
@@ -489,4 +491,10 @@ const styles = StyleSheet.create({
     elevation: 80,
     backgroundColor: 'white',
   },
+  // themeMenu: {
+  //   position: 'absolute',
+  //   bottom: 0,
+  //   left: 0,
+  //   width: '100%',
+  // },
 });
