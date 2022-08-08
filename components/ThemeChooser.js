@@ -37,20 +37,13 @@ class ThemeChooser extends Component {
       onResponderSingleTapConfirmed: (evt, gestureState) => {},
       onResponderRelease: (evt, gestureState) => {
         const { x, y } = this.state;
-        console.log(y);
         if (y._value < 200) {
           this.state.bounceValue.setValue(550 + y._value);
           this.state.menuBounce.setValue(0 + y._value);
           this.handleSnapTransition(550, this.state.bounceValue);
-          
           this.handleSnapTransition(0, this.state.menuBounce);
           y.setValue(0);
         }
-
-        // }
-        // console.log(y);
-        // console.log(y);
-        // this.setState({ y: new Animated.Value(0) });
       },
     });
   }

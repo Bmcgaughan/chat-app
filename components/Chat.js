@@ -58,7 +58,6 @@ export default function Chat(props) {
   const [profileView, setProfileView] = useState(false);
   const [colorSpring, setColorSpring] = useState(false);
   const [colorMenuOpen, setColorMenuOpen] = useState(false);
-  const [colorMenuVisible, setColorMenuVisible] = useState(false);
   const [bounceValue, setBounceValue] = useState(new Animated.Value(-250));
   const [spinValue, setSpinValue] = useState(new Animated.Value(0));
   const [colorBounceValue, setColorBounceValue] = useState(
@@ -148,6 +147,7 @@ export default function Chat(props) {
     setMessages(messageArray.sort((a, b) => b.createdAt - a.createdAt));
   };
 
+  //pulling local messages if offline
   const getMessages = async () => {
     let messages = '';
     try {
@@ -158,6 +158,7 @@ export default function Chat(props) {
     }
   };
 
+  //saving messages to AsyncStorage
   const saveMessages = async () => {
     try {
       await AsyncStorage.setItem('messages', JSON.stringify(messages));
@@ -312,6 +313,7 @@ export default function Chat(props) {
     }
   };
 
+  //user clicking for dark mode menu
   const handleDarkMode = () => {
     handleProfileClick();
     setthemeChooser(true);
@@ -325,6 +327,7 @@ export default function Chat(props) {
     setthemeChooser(!themeChooser);
   };
 
+  //value for background color menu spin animation
   const spin = spinValue.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '90deg'],
@@ -336,7 +339,7 @@ export default function Chat(props) {
         style={[
           styles.topBar,
           { backgroundColor: darkMode ? 'black' : 'white' },
-          { borderBottomWidth: darkMode ? .5 : 0 },
+          { borderBottomWidth: darkMode ? 0.5 : 0 },
           { borderBottomColor: darkMode ? 'white' : 'black' },
         ]}
       >
@@ -451,7 +454,6 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    //align items to right
     zIndex: 100,
   },
   topBarName: {
