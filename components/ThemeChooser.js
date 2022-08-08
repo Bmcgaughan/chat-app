@@ -170,73 +170,67 @@ class ThemeChooser extends Component {
             },
           ]}
         >
-          <View
-            style={[
-              styles.menuHeader,
-              { backgroundColor: this.state.darkMode ? 'black' : 'white' },
-            ]}
-          >
-            <Text
-              style={[
-                styles.menuText,
-                { color: this.state.darkMode ? 'white' : 'black' },
-              ]}
-            >
-              Dark Mode
-            </Text>
-          </View>
-
-          <View
-            style={[
-              styles.menuBody,
-              { backgroundColor: this.state.darkMode ? 'black' : 'white' },
-            ]}
-          >
+          <View style={{ top: 600 }}>
             <View
               style={[
-                styles.menuRow,
+                styles.menuBody,
                 { backgroundColor: this.state.darkMode ? 'black' : 'white' },
               ]}
             >
               <Text
                 style={[
-                  styles.menuItemText,
+                  styles.menuText,
                   { color: this.state.darkMode ? 'white' : 'black' },
                 ]}
               >
-                On
+                Dark Mode
               </Text>
-              <RadioButton
-                value="first"
-                status={darkMode ? 'checked' : 'unchecked'}
-                onPress={() => this.setChecked()}
-                disabled={false}
-                color={darkMode ? 'white' : 'black'}
-                uncheckedColor={darkMode ? 'white' : 'black'}
-              />
-            </View>
-            <View
-              style={[
-                styles.menuRow,
-                { backgroundColor: this.state.darkMode ? 'black' : 'white' },
-              ]}
-            >
-              <Text
+              <View
                 style={[
-                  styles.menuItemText,
-                  { color: this.state.darkMode ? 'white' : 'black' },
+                  styles.menuRow,
+                  { backgroundColor: this.state.darkMode ? 'black' : 'white' },
                 ]}
               >
-                Off
-              </Text>
-              <RadioButton
-                value="second"
-                status={darkMode ? 'unchecked' : 'checked'}
-                onPress={() => this.setChecked()}
-                disabled={false}
-                color={darkMode ? 'white' : 'black'}
-                uncheckedColor={darkMode ? 'white' : 'black'}
-              />
+                <Text
+                  style={[
+                    styles.menuItemText,
+                    { color: this.state.darkMode ? 'white' : 'black' },
+                  ]}
+                >
+                  On
+                </Text>
+                <RadioButton
+                  value="first"
+                  status={darkMode ? 'checked' : 'unchecked'}
+                  onPress={() => this.setChecked()}
+                  disabled={false}
+                  color={darkMode ? 'white' : 'black'}
+                  uncheckedColor={darkMode ? 'white' : 'black'}
+                />
+              </View>
+              <View
+                style={[
+                  styles.menuRow,
+                  { backgroundColor: this.state.darkMode ? 'black' : 'white' },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.menuItemText,
+                    { color: this.state.darkMode ? 'white' : 'black' },
+                  ]}
+                >
+                  Off
+                </Text>
+                <RadioButton
+                  value="second"
+                  status={darkMode ? 'unchecked' : 'checked'}
+                  onPress={() => this.setChecked()}
+                  disabled={false}
+                  color={darkMode ? 'white' : 'black'}
+                  uncheckedColor={darkMode ? 'white' : 'black'}
+                />
+              </View>
             </View>
           </View>
         </Animated.View>
@@ -267,7 +261,6 @@ const styles = StyleSheet.create({
     height: 1,
   },
   menuHeader: {
-    top: 600,
     height: 75,
     width: '100%',
     paddingTop: 10,
@@ -279,11 +272,10 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   menuBody: {
-    top: 600,
     flexDirection: 'column',
     justifyContent: 'space-between',
     width: '100%',
-    height: 270,
+    height: 300,
     alignItems: 'center',
     paddingLeft: 40,
     paddingRight: 40,
