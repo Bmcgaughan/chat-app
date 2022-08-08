@@ -42,6 +42,7 @@ class ThemeChooser extends Component {
           this.state.bounceValue.setValue(550 + y._value);
           this.state.menuBounce.setValue(0 + y._value);
           this.handleSnapTransition(550, this.state.bounceValue);
+          
           this.handleSnapTransition(0, this.state.menuBounce);
           y.setValue(0);
         }
@@ -58,7 +59,7 @@ class ThemeChooser extends Component {
     this.handleMenuTransition('up');
     setTimeout(() => {
       this.handleDragTransition('up');
-    }, 105);
+    }, 110);
   }
 
   pan = (gestureState) => {
@@ -114,7 +115,7 @@ class ThemeChooser extends Component {
     Animated.spring(this.state.menuBounce, {
       toValue: direction === 'down' ? 1000 : 0,
       velocity: 3,
-      tension: 4,
+      tension: 0,
       friction: 15,
       useNativeDriver: false,
     }).start();
@@ -125,7 +126,7 @@ class ThemeChooser extends Component {
       toValue: offset,
       velocity: 1,
       tension: 4,
-      friction: 3,
+      friction: 15,
       useNativeDriver: false,
     }).start();
   }
