@@ -30,7 +30,7 @@ export default function Start(props) {
   const [userName, setUserName] = useState('');
   const [backgroundColor, setBackgroundColor] = useState(colors.black);
   const [searchIcon, setSearchIcon] = useState(true);
-  const [userNameAlert, setUserNameAlert] = useState('false');
+  const [userNameAlert, setUserNameAlert] = useState(false);
 
   const { height } = Dimensions.get('window');
 
@@ -58,7 +58,6 @@ export default function Start(props) {
   const handleBackgroundColor = (color) => {
     setBackgroundColor(color);
   };
-
 
   return (
     <View style={[styles.container, { height: height }]}>
@@ -89,7 +88,7 @@ export default function Start(props) {
               onChangeText={(text) => handleUserInput(text)}
               value={userName.text}
               placeholder={'Your Name'}
-              clearTextOnFocus={false}
+              clearTextOnFocus={true}
             />
           </View>
           <Text style={styles.chooseText}>Choose Background Color</Text>
@@ -168,7 +167,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    paddingLeft: 50
+    paddingLeft: 50,
   },
 
   chooseText: {
