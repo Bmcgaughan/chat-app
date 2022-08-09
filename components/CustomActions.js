@@ -84,7 +84,28 @@ export default function CustomActions(props) {
     }
   };
 
-  
+  //getting user location and getting coordinates - asks for permission
+  const sendLocation = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    try {
+      if (status === 'granted') {
+        const location = await Location.getCurrentPositionAsync({}).catch(
+          (error) => console.log(error)
+        );
+
+        if (location) {
+          props.onSend({
+            location: {
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            },
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //opens action menu
   const onActionPress = () => {
@@ -109,7 +130,7 @@ export default function CustomActions(props) {
             takePhoto();
             return;
           case 2:
-            console.log('user wants to get their location');
+            sendLocation();
           default:
         }
       }

@@ -22,6 +22,8 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
+import MapView from 'react-native-maps';
+
 import {
   GiftedChat,
   SystemMessage,
@@ -109,6 +111,29 @@ export default function Chat(props) {
     return <CustomActions {...props} />;
   };
 
+  const renderCustomView = (props) => {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          style={{
+            width: 150,
+            height: 100,
+            borderRadius: 13,
+            margin: 3,
+          }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.04,
+            longitudeDelta: 0.05,
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
   //change system message color
   const renderSystemMessage = (props) => (
     <SystemMessage
@@ -133,6 +158,7 @@ export default function Chat(props) {
           createdAt: data.createdAt.toDate(),
           image: data.image,
           system: data.system,
+          location: data.location,
         });
       } else {
         messageArray.push({
@@ -140,6 +166,7 @@ export default function Chat(props) {
           text: data.text,
           createdAt: data.createdAt.toDate(),
           image: data.image,
+          location: data.location,
           user: {
             _id: data.user._id,
             name: data.user.name,
@@ -188,14 +215,6 @@ export default function Chat(props) {
     //send to firebase if user is online
     if (isConnected) {
       addDoc(colRef, messages[0]);
-      // addDoc(colRef, {
-      //   _id: messages[0]._id,
-      //   text: messages[0].text || '',
-      //   createdAt: Date.parse(messages[0].createdAt),
-      //   user: messages[0].user,
-      //   image: messages[0].image || null,
-      //   location: messages[0].location || null,
-      // });
     }
   };
 
@@ -420,6 +439,7 @@ export default function Chat(props) {
           renderActions={renderCustomActions}
           renderSystemMessage={renderSystemMessage}
           renderInputToolbar={renderInputToolbar}
+          renderCustomView={renderCustomView}
           renderDay={renderDay}
           onSend={(messages) => onSend(messages)}
           showUserAvatar={true}
