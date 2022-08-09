@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 
-import ProfileSlide from './ProfileSlide.js';
-import ColorChooser from './ColorChooser.js';
-import ThemeChooser from './ThemeChooser.js';
+import ProfileSlide from './ProfileSlide';
+import ColorChooser from './ColorChooser';
+import ThemeChooser from './ThemeChooser';
+import CustomActions from './CustomActions';
 
 import {
   StyleSheet,
@@ -21,14 +22,11 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-import uuid from 'react-uuid';
-
 import {
   GiftedChat,
   SystemMessage,
   Day,
   InputToolbar,
-  Avatar,
 } from 'react-native-gifted-chat';
 
 //import firebase
@@ -107,6 +105,10 @@ export default function Chat(props) {
     }
   };
 
+  const renderCustomActions = (props) => {
+    return <CustomActions {...props} />;
+  };
+
   //change system message color
   const renderSystemMessage = (props) => (
     <SystemMessage
@@ -128,14 +130,16 @@ export default function Chat(props) {
         messageArray.push({
           _id: data.id,
           text: data.text,
-          createdAt: data.createdAt,
+          createdAt: data.createdAt.toDate(),
+          image: data.image,
           system: data.system,
         });
       } else {
         messageArray.push({
           _id: data._id,
           text: data.text,
-          createdAt: data.createdAt,
+          createdAt: data.createdAt.toDate(),
+          image: data.image,
           user: {
             _id: data.user._id,
             name: data.user.name,
@@ -183,14 +187,15 @@ export default function Chat(props) {
     );
     //send to firebase if user is online
     if (isConnected) {
-      addDoc(colRef, {
-        _id: messages[0]._id,
-        text: messages[0].text || '',
-        createdAt: Date.parse(messages[0].createdAt),
-        user: messages[0].user,
-        image: messages[0].image || null,
-        location: messages[0].location || null,
-      });
+      addDoc(colRef, messages[0]);
+      // addDoc(colRef, {
+      //   _id: messages[0]._id,
+      //   text: messages[0].text || '',
+      //   createdAt: Date.parse(messages[0].createdAt),
+      //   user: messages[0].user,
+      //   image: messages[0].image || null,
+      //   location: messages[0].location || null,
+      // });
     }
   };
 
@@ -412,6 +417,7 @@ export default function Chat(props) {
       <View style={[styles.chatBox, { opacity: profileView ? 0.5 : 1 }]}>
         <GiftedChat
           messages={messages}
+          renderActions={renderCustomActions}
           renderSystemMessage={renderSystemMessage}
           renderInputToolbar={renderInputToolbar}
           renderDay={renderDay}
