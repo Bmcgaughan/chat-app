@@ -18,6 +18,8 @@ const storage = getStorage(app);
 export default function CustomActions(props) {
   const { showActionSheetWithOptions } = useActionSheet();
 
+  //function taking local image uri and posting to firebase storage
+  //it then returns the firebase uri to display in the chat component
   const uploadImage = async (uri) => {
     const img = await fetch(uri);
     const imgBlob = await img.blob();
@@ -39,6 +41,8 @@ export default function CustomActions(props) {
     });
   };
 
+  //prompt user to select image from their device and asks for permission
+  //calls uploadImage function to upload image to firebase storage
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     try {
@@ -59,6 +63,30 @@ export default function CustomActions(props) {
     }
   };
 
+  //lets user take picture for message and asks for permission
+  const takePhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    try {
+      if (status === 'granted') {
+        let launchResult = await ImagePicker.launchCameraAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        }).catch((error) => console.log(error));
+
+        if (!launchResult.cancelled) {
+          const photoUrl = await uploadImage(launchResult.uri);
+          props.onSend({
+            image: photoUrl,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  
+
+  //opens action menu
   const onActionPress = () => {
     const options = [
       'Choose Photo from Gallery',
@@ -75,11 +103,10 @@ export default function CustomActions(props) {
       async (buttonIndex) => {
         switch (buttonIndex) {
           case 0:
-            console.log('user wants to pick an image');
             pickImage();
             return;
           case 1:
-            console.log('user wants to take a photo');
+            takePhoto();
             return;
           case 2:
             console.log('user wants to get their location');
