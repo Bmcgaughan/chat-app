@@ -2,8 +2,7 @@
  
 ## Description
 
-Project (just starting) to create a chat application using React Native. Right now - the user can enter their name and choose a theme color...eventually will be able to send and recieve messages and media.
-
+Chat application using React Native. The app lets the user pick a theme, toggle between dark/light mode, and send pictures, take photos, send their location.
 
 
 ### Get Started
@@ -11,9 +10,6 @@ Project (just starting) to create a chat application using React Native. Right n
 - Clone the project
 - run npm install to install all dependancies
 
-### Application Use
-
-Work in Progress...right now just getting the structure set up. User can enter their name and choose a theme color.
 
 ### User Stories
 - As a new user, I want to be able to easily enter a chat room so I can quickly start talking to my friends and family.
